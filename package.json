@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "gulpfile.js",
   "scripts": {
-    "build": "gulp build && tsc",
+    "build": "gulp frontend:build && tsc",
     "start": "npm run build && concurrently \"npm run tsc:w\" \"npm run lite\" \"npm run sasswatch\"",
     "lite": "lite-server",
     "postinstall": "typings install",
@@ -25,6 +25,7 @@
     "angular2-in-memory-web-api": "0.0.7",
     "es6-promise": "^3.2.1",
     "es6-shim": "^0.35.0",
+    "gulp-shell": "^0.5.2",
     "reflect-metadata": "^0.1.3",
     "rxjs": "5.0.0-beta.6",
     "systemjs": "0.19.27",
@@ -40,7 +41,11 @@
     "typescript": "^1.8.10",
     "typings": "^0.8.1"
   },
-  "keywords": ["Angular", "Angular2", "typescript"],
+  "keywords": [
+    "Angular",
+    "Angular2",
+    "typescript"
+  ],
   "author": "Cory Forward",
   "license": "MIT",
   "description": "An easy to use Angular 2 boilerplate for Angular 2 RC1"
