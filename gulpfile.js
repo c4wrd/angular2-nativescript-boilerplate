@@ -4,8 +4,8 @@ var gulp = require('gulp'),
     sass = require("gulp-sass"),
     runSeq = require('run-sequence');
 
-gulp.task('frontend:clean', function(){
-    return del('dist/frontend/**/*', {force:true});
+gulp.task('dist:clean', function(){
+    return del('dist/**/*', {force:true});
 });
 
 gulp.task('frontend:copy', () => {
@@ -28,15 +28,7 @@ gulp.task('frontend:copy', () => {
       to: "./dist/frontend/assets/js/vendor/rxjs"
     },
     {
-      from: './src/frontend/index.html',
-      to: './dist/frontend'
-    },
-    {
-      from: './src/frontend/systemjs.config.js',
-      to: './dist/frontend/assets/js'
-    },
-    {
-      from: './src/frontend/assets',
+      from: ['./src/frontend/**/*', '!./src/frontend/assets/scss/**/*'],
       to: './dist/frontend'
     }
   ];
@@ -47,9 +39,9 @@ gulp.task('frontend:copy', () => {
 });
 
 gulp.task('frontend:transpile:sass', function() {
-     gulp.src('./src/frontend/scss/**/*.scss')
+     gulp.src('./src/**/*.scss')
         .pipe(sass().on('error', sass.logError))
-        .pipe(gulp.dest('./dist/frontend/assets/css/'));
+        .pipe(gulp.dest('./dist'));
 });
 
 gulp.task('frontend:transpile:ts', shell.task(['tsc']));
@@ -59,7 +51,7 @@ gulp.task("sass:watch", function() {
 });
 
 gulp.task('frontend:build', function(done){
-    return runSeq('frontend:clean', 'frontend:copy', 'frontend:transpile:sass', 'frontend:transpile:ts', done);
+    return runSeq('dist:clean', 'frontend:copy', 'frontend:transpile:sass', 'frontend:transpile:ts', done);
 });
 
 gulp.task('default', ['frontend:build']);
