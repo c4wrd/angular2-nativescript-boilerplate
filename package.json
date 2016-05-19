@@ -4,7 +4,7 @@
   "main": "gulpfile.js",
   "scripts": {
     "build": "gulp frontend:build && tsc",
-    "start": "npm run build && concurrently \"npm run tsc:w\" \"npm run lite\" \"npm run sasswatch\"",
+    "start": "npm run build && concurrently \"npm run tsc:w\" \"npm run lite\" \"gulp frontend:watch\"",
     "lite": "lite-server",
     "postinstall": "typings install",
     "sasswatch": "gulp sass:watch",
