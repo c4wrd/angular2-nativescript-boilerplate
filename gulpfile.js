@@ -44,11 +44,11 @@ gulp.task('frontend:transpile:sass', function() {
         .pipe(gulp.dest('./dist'));
 });
 
-gulp.task('frontend:transpile:ts', shell.task(['tsc']));
-
 gulp.task("sass:watch", function() {
-   gulp.watch('./src/frontend/scss/**/*.scss',['frontend:transpile:sass']);
+   gulp.watch('./src/**/*.scss',['frontend:transpile:sass']);
 });
+
+gulp.task('frontend:transpile:ts', shell.task(['tsc']));
 
 gulp.task('frontend:build', function(done){
     return runSeq('dist:clean', 'frontend:copy', 'frontend:transpile:sass', 'frontend:transpile:ts', done);
