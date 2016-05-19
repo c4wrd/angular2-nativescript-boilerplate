@@ -39,13 +39,13 @@ gulp.task('frontend:copy', () => {
 });
 
 gulp.task('frontend:transpile:sass', function() {
-     gulp.src('./src/**/*.scss')
+     gulp.src('./src/frontend/**/*.scss')
         .pipe(sass().on('error', sass.logError))
         .pipe(gulp.dest('./dist'));
 });
 
 gulp.task("sass:watch", function() {
-   gulp.watch('./src/**/*.scss',['frontend:transpile:sass']);
+   gulp.watch('./src/frontend/**/*.scss',['frontend:transpile:sass']);
 });
 
 gulp.task('frontend:transpile:ts', shell.task(['tsc']));
