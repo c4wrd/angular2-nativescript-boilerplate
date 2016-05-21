@@ -4,64 +4,36 @@ var gulp = require('gulp'),
     sass = require("gulp-sass"),
     runSeq = require('run-sequence');
 
-gulp.task('dist:clean', () =>{
-    return del('dist/**/*', {force:true});
+gulp.task('app:clean', () =>{
+    return del('app/**/*', {force:true});
 });
 
-gulp.task('frontend:copy', () => {
-  var fssetup = [
-    {
-      from: [
-          "node_modules/es6-shim/es6-shim.min.js",
-          "node_modules/reflect-metadata/Reflect.js",
-          "node_modules/systemjs/dist/system.src.js",
-          "node_modules/zone.js/dist/zone.js"
-      ],
-      to: "./dist/frontend/assets/js/vendor"
-    },
-    {
-      from: "node_modules/@angular/**/*",
-      to: "./dist/frontend/assets/js/vendor/@angular"
-    },
-    {
-      from: "node_modules/rxjs/**/*",
-      to: "./dist/frontend/assets/js/vendor/rxjs"
-    },
-    {
-      from: ['./src/frontend/**/*', '!./src/frontend/assets/scss/**/*', '!./src/frontend/**/*.ts'],
-      to: './dist/frontend'
-    }
-  ];
-
-  return fssetup.map((setup) => {
-    return gulp.src(setup.from).pipe(gulp.dest(setup.to));
-  });
+gulp.task('app:copy', () => {
+  return gulp.src(['./src/**/*', '!./src/**/*.scss', '!./src/**/*.ts'])
+    .pipe(gulp.dest('./app'));
 });
 
-gulp.task('frontend:transpile:sass', () => {
-     gulp.src('./src/frontend/**/*.scss')
+gulp.task('app:transpile:sass', () => {
+     gulp.src('./src/**/*.scss')
         .pipe(sass().on('error', sass.logError))
-        .pipe(gulp.dest('./dist/frontend'));
+        .pipe(gulp.dest('./app'));
 });
 
 gulp.task("sass:watch", () => {
-   gulp.watch('./src/frontend/**/*.scss',['frontend:transpile:sass']);
+   gulp.watch('./src/**/*.scss',['app:transpile:sass']);
 });
 
-gulp.task('frontend:transpile:ts', shell.task(['tsc']));
+gulp.task('app:transpile:ts', shell.task(['tsc']));
 
-gulp.task('frontend:build', (done) => {
-    return runSeq('dist:clean', 'frontend:copy', 'frontend:transpile:sass', 'frontend:transpile:ts', done);
+gulp.task('app:build', (done) => {
+    return runSeq('app:clean', 'app:copy', 'app:transpile:sass', 'app:transpile:ts', done);
 });
 
-gulp.task('frontend:watch', () => {
+gulp.task('app:watch', () => {
   return gulp.watch([
-    './src/frontend/**/*',
-    '!./src/frontend/**/*.ts',
-    '!./src/frontend/**/*.scss'], () => {
-      gulp.src(['./src/frontend/**/*', '!./src/frontend/assets/scss/**/*', '!./src/frontend/**/*.ts'])
-        .pipe(gulp.dest('./dist/frontend'))
-    });
+    './src/**/*',
+    '!./src/**/*.ts',
+    '!./src/**/*.scss'], ['app:copy']);
 });
 
-gulp.task('default', ['frontend:build']);
+gulp.task('default', ['app:build']);
